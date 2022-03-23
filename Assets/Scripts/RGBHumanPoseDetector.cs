@@ -35,7 +35,7 @@ public class RGBHumanPoseDetector : MonoBehaviour
 
     // training statistics for PoseNet
     private float[] mean = { 0.485f, 0.456f, 0.406f };
-    private float[] std = { 0.229f, 0.224f, 0.225f };    
+    private float[] std = { 0.229f, 0.224f, 0.225f };
 
     // Start is called before the first frame update
     void Start()
@@ -43,7 +43,7 @@ public class RGBHumanPoseDetector : MonoBehaviour
 
         // Initialize the tracking indicators
         sphere_list = new List<GameObject>();
-        for(int joint_id=0; joint_id<m_TrackableJoints.Length; joint_id++)
+        for (int joint_id = 0; joint_id < m_TrackableJoints.Length; joint_id++)
         {
             GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             var cubeRenderer = sphere.GetComponent<Renderer>();
@@ -51,7 +51,7 @@ public class RGBHumanPoseDetector : MonoBehaviour
 
             sphere_list.Add(sphere);
         }
-            
+
         // Initializations
         m_cam = Camera.main;
         m_screen_width = Screen.width;
@@ -67,7 +67,7 @@ public class RGBHumanPoseDetector : MonoBehaviour
 
         // Set PyTorch model format
         ComputeInfo.channelsOrder = ComputeInfo.ChannelsOrder.NCHW;
-        
+
         // Register vuforia callbacks
         VuforiaApplication.Instance.OnVuforiaStarted += OnVuforiaStarted;
         VuforiaBehaviour.Instance.World.OnStateUpdated += OnVuforiaUpdated;
@@ -98,18 +98,18 @@ public class RGBHumanPoseDetector : MonoBehaviour
         if (image.Width != 0)
         {
             // Copy image to Texture2D and resize to model input format
-            Texture2D targetTexture = new Texture2D(img_width, img_heigth, TextureFormat.RGB24, false);           
+            Texture2D targetTexture = new Texture2D(img_width, img_heigth, TextureFormat.RGB24, false);
             image.CopyToTexture(targetTexture, false);
             targetTexture = ScaleTexture(targetTexture, img_width, img_heigth);
             targetTexture.Apply();
-            
+
             // Save texture to PNG for debugging
             // byte[] bytes = targetTexture.EncodeToPNG();
             // File.WriteAllBytes(Application.dataPath + "/../SavedScreen.png", bytes);
 
             // Convert texture to Barracuda tensor
             Tensor inputs = new Tensor(targetTexture);
-            
+
             // Run the model
             m_worker.Execute(inputs);
             Tensor output = m_worker.PeekOutput();
