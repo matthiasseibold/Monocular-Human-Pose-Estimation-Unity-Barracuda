@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -2067402452, guid: 1e108ae5f2133934f948edded555f03e, type: 3}
+  m_Name: VuforiaConfiguration
+  m_EditorClassIdentifier: 
+  vuforia:
+    vuforiaLicenseKey: 
+    ufoLicenseKey: QVpudEgvTC8vLy8vQUFBQUtFTFZRVkljN2ttUnY1U3RrWjRMdHhablNWalJYUXNVaVE2OW13K09ab1JwMHdaMy91Wm5yT0RGOUhaMGlIMmV6ZUROUHFKUDh0b29GSmFPbWRPdWFNYURFYkI3VndMYmxvNGNyU0FPUXJuQkppcXBFOTc2U2pKQjZqR2FYQnVqcHJQL2hJRytWYWxRaFlzZmtVTGc0MkVXUkFRL0F4ZnkyeXdrVzd5REpiZFlnTktIS2tjZGpoZDdrYzhBd0twc0hMb2FSazRGcEMwQUF6aGtQRGNkVFc5YVFGeUtjaGxFa0M0MTMvckJ4MGd5RTh3V2E2Qld3eGQ2TXRySEVJRmFlL1lKNDA0L0dpV2VuUmw4RThOZittVytyRkFzTnBlUkVKZXZNa0FhMGNzZVl6c0RvMG01NUJ0Y05JdXl4ZGVOOS9YbVNqblh4VXBnTk9kVWNCbkRKeERRYnk5ZFA3cmZqanF2ZElQcjZvMlM=
+    delayedInitialization: 0
+    cameraFocusModeSetting: 2
+    cameraDeviceModeSetting: -1
+    maxSimultaneousImageTargets: 1
+    maxSimultaneousObjectTargets: 1
+    virtualSceneScaleFactor: 1
+    useDelayedLoadingObjectTargets: 0
+    modelTargetRecoWhileExtendedTracked: 1
+    shareRecordingsInITunes: 0
+    version: 10.5.5
+    eulaAcceptedVersions: '{"Values":["7.5","7.1","7.2","7.7","8.0","0.0","8.1","9.8","10.5"]}'
+  database:
+    disableModelExtraction: 0
+  shaders:
+    depthMaskShader: {fileID: 4800000, guid: 1ce7eb78425fb1540838bc9d5d95857a, type: 3}
+  videoBackground:
+    numDivisions: 2
+    videoBackgroundShader: {fileID: 4800000, guid: f40623b353e2f1943b1b3ba42975db7a, type: 3}
+    unlitShader: {fileID: 10752, guid: 0000000000000000f000000000000000, type: 0}
+    videoBackgroundEnabled: 1
+  deviceTracker:
+    autoStartTracker: 1
+    arcoreRequirement: 1
+    autoImportArcore: 1
+    thirdPartyARCoreClientDetected: 0
+  playmode:
+    mSequencePath: 
+    playModeType: 0
+  webcam:
+    renderTextureLayer: 30
+  packageInformation:
+    ARFoundationVersion: 
