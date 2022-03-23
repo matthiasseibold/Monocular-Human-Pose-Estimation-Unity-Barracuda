@@ -10,6 +10,7 @@ https://github.com/satyajitghana/TSAI-DeepVision-EVA4.0-Phase-2/blob/master/05-H
 - Unity 2020.3.31f1  
 - Barracuda 3.0.0  
 - Vuforia 10.5.5  
+- Visual Studio 2019  
 
 # Install
 To install Barracuda 3.0.0, in Unity, go to Window > Package Manager > + (in left top corner) > Add package from git URL > enter "com.unity.barracuda"
