@@ -1,5 +1,5 @@
 # Monocular-Human-Pose-Estimation-Unity-Barracuda
-Monocular human pose estimation from a webcam texture in Unity using Vuforia and Barracuda with Pose-ResNet-50  
+Monocular human pose estimation from a webcam texture in Unity using Vuforia and Barracuda with Pose-ResNet-50 pretrained on the MPII Dataset which regresses 16 human body points/joints.
   
 This repository is a Unity port from a blog post by GitHub user satyajitghana  
 https://github.com/satyajitghana/TSAI-DeepVision-EVA4.0-Phase-2/blob/master/05-HumanPoseEstimation-ONNX/HumanPoseEstimation_ONNX_Quant.ipynb
