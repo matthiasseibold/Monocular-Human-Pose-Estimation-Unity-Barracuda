@@ -35,13 +35,13 @@ By default, the project is configured to track the joints of the upper body (joi
 5 - l ankle  
 6 - pelvis   
 7 - thorax   
-8 - upper neck 
-9 - head top 
-10 - r wrist
-11 - r elbow
-12 - r shoulder
-13- l shoulder 
-14 - l elbow 
-15 - l wrist      
+8 - upper neck  
+9 - head top  
+10 - r wrist  
+11 - r elbow  
+12 - r shoulder  
+13- l shoulder   
+14 - l elbow   
+15 - l wrist        
 
 
