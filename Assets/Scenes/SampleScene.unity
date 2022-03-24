@@ -357,7 +357,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RunOnGPU: 1
-  modelAsset: {fileID: 5022602860645237092, guid: de2838b917bfaf545bcfa37991207076, type: 3}
+  TrackingModel: {fileID: 5022602860645237092, guid: de2838b917bfaf545bcfa37991207076, type: 3}
+  DepthModel: {fileID: 5022602860645237092, guid: 7b59212a3d8cddf4e9ee8de8622e9dbe, type: 3}
   TrackingThreshold: 0.3
   m_TrackableJoints: 070000000a0000000b0000000c0000000d0000000e0000000f000000
 --- !u!4 &1461320305

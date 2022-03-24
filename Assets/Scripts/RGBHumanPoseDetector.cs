@@ -10,7 +10,8 @@ public class RGBHumanPoseDetector : MonoBehaviour
 
     // Public Script parameters
     public bool RunOnGPU = true;
-    public NNModel modelAsset;
+    public NNModel TrackingModel;
+    public NNModel DepthModel;
     public float TrackingThreshold = 0.3f;
     public int[] m_TrackableJoints = { 7, 10, 11, 12, 13, 14, 15 };
 
@@ -29,13 +30,14 @@ public class RGBHumanPoseDetector : MonoBehaviour
     private Camera m_cam;
     private float m_screen_width, m_screen_heigth;
     private int img_width, img_heigth;
-    private IWorker m_worker;
+    private IWorker m_worker_tracking;
+    private IWorker m_worker_depth;
     PixelFormat m_pixelFormat;
     List<GameObject> sphere_list;
 
     // training statistics for PoseNet
     private float[] mean = { 0.485f, 0.456f, 0.406f };
-    private float[] std = { 0.229f, 0.224f, 0.225f };    
+    private float[] std = { 0.229f, 0.224f, 0.225f };
 
     // Start is called before the first frame update
     void Start()
@@ -43,7 +45,7 @@ public class RGBHumanPoseDetector : MonoBehaviour
 
         // Initialize the tracking indicators
         sphere_list = new List<GameObject>();
-        for(int joint_id=0; joint_id<m_TrackableJoints.Length; joint_id++)
+        for (int joint_id = 0; joint_id < m_TrackableJoints.Length; joint_id++)
         {
             GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             var cubeRenderer = sphere.GetComponent<Renderer>();
@@ -51,7 +53,7 @@ public class RGBHumanPoseDetector : MonoBehaviour
 
             sphere_list.Add(sphere);
         }
-            
+
         // Initializations
         m_cam = Camera.main;
         m_screen_width = Screen.width;
@@ -60,14 +62,18 @@ public class RGBHumanPoseDetector : MonoBehaviour
         img_heigth = 256;
 
         // Load model and worker in Barracuda
-        Model model = ModelLoader.Load(modelAsset);
+        Model tracking_model = ModelLoader.Load(TrackingModel);
+        Model depth_model = ModelLoader.Load(DepthModel);
 
-        if (RunOnGPU) { m_worker = WorkerFactory.CreateWorker(WorkerFactory.Type.ComputePrecompiled, model); }
-        else { m_worker = WorkerFactory.CreateWorker(WorkerFactory.Type.CSharpBurst, model); }
+        if (RunOnGPU) { 
+            m_worker_tracking = WorkerFactory.CreateWorker(WorkerFactory.Type.ComputePrecompiled, tracking_model);
+            m_worker_depth = WorkerFactory.CreateWorker(WorkerFactory.Type.ComputePrecompiled, depth_model);
+        }
+        else { 
+            m_worker_tracking = WorkerFactory.CreateWorker(WorkerFactory.Type.CSharpBurst, tracking_model);
+            m_worker_depth = WorkerFactory.CreateWorker(WorkerFactory.Type.CSharpBurst, depth_model);
+        }
 
-        // Set PyTorch model format
-        ComputeInfo.channelsOrder = ComputeInfo.ChannelsOrder.NCHW;
-        
         // Register vuforia callbacks
         VuforiaApplication.Instance.OnVuforiaStarted += OnVuforiaStarted;
         VuforiaBehaviour.Instance.World.OnStateUpdated += OnVuforiaUpdated;
@@ -98,21 +104,26 @@ public class RGBHumanPoseDetector : MonoBehaviour
         if (image.Width != 0)
         {
             // Copy image to Texture2D and resize to model input format
-            Texture2D targetTexture = new Texture2D(img_width, img_heigth, TextureFormat.RGB24, false);           
+            Texture2D targetTexture = new Texture2D(img_width, img_heigth, TextureFormat.RGB24, false);
             image.CopyToTexture(targetTexture, false);
             targetTexture = ScaleTexture(targetTexture, img_width, img_heigth);
             targetTexture.Apply();
-            
+
             // Save texture to PNG for debugging
             // byte[] bytes = targetTexture.EncodeToPNG();
             // File.WriteAllBytes(Application.dataPath + "/../SavedScreen.png", bytes);
 
             // Convert texture to Barracuda tensor
             Tensor inputs = new Tensor(targetTexture);
-            
-            // Run the model
-            m_worker.Execute(inputs);
-            Tensor output = m_worker.PeekOutput();
+
+            // Run tracking model
+            m_worker_tracking.Execute(inputs);
+            Tensor output_poses = m_worker_tracking.PeekOutput();
+
+            // Run depth model
+            m_worker_depth.Execute(inputs);
+            Tensor output_depth = m_worker_depth.PeekOutput();
+            var depth_max = output_depth.ArgMax();
 
             float from_val;
             int from_x;
@@ -129,9 +140,9 @@ public class RGBHumanPoseDetector : MonoBehaviour
                 {
                     for (int j = 0; j < 64; j++)
                     {
-                        if (output[0, i, j, m_TrackableJoints[joint_id]] > from_val)
+                        if (output_poses[0, i, j, m_TrackableJoints[joint_id]] > from_val)
                         {
-                            from_val = output[0, i, j, m_TrackableJoints[joint_id]];
+                            from_val = output_poses[0, i, j, m_TrackableJoints[joint_id]];
                             from_x = j;
                             from_y = i;
                         }
@@ -140,8 +151,14 @@ public class RGBHumanPoseDetector : MonoBehaviour
 
                 // Debug.Log("Max Val: " + from_val + "\nLocation Height: " + from_y + "\nLocation Width: " + from_x);
 
+                // Compute normalized depth at pixel location
+                var x_depth_pos = 256 * from_x / 64;
+                var y_depth_pos = 256 * from_y / 64;
+                Debug.Log(output_depth);
+                var depth_val = output_depth[0, 0, x_depth_pos, y_depth_pos];
+
                 // Render tracking indicator at tracked position
-                Vector3 point = new Vector3(m_screen_width * from_x / 64, m_screen_heigth - m_screen_heigth * from_y / 64, 40f);
+                Vector3 point = new Vector3(m_screen_width * from_x / 64, m_screen_heigth - m_screen_heigth * from_y / 64, depth_val * 40f / 1000f);
                 Vector3 world_point = m_cam.ScreenToWorldPoint(point);
 
                 if (from_val > TrackingThreshold)
@@ -159,7 +176,7 @@ public class RGBHumanPoseDetector : MonoBehaviour
 
             // Clean up Tensors
             inputs.Dispose();
-            output.Dispose();
+            output_poses.Dispose();
 
         }
 
