@@ -19,7 +19,7 @@ To install Vuforia 10.5.5, go to https://developer.vuforia.com/downloads/SDK and
   
 Download pretrained models from:
 
-https://github.com/isl-org/MiDaS/tree/master/tf
+https://github.com/isl-org/MiDaS/tree/master/tf  
 https://drive.google.com/drive/folders/1g_6Hv33FG6rYRVLXx1SZaaHj871THrRW  
 
 and put them into ./Assets/Models/
