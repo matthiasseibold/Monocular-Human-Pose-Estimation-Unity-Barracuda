@@ -10,6 +10,7 @@ https://github.com/satyajitghana/TSAI-DeepVision-EVA4.0-Phase-2/blob/master/05-H
 - Unity 2020.3.31f1  
 - Barracuda 3.0.0  
 - Vuforia 10.5.5  
+- Visual Studio 2019  
 
 # Install
 To install Barracuda 3.0.0, in Unity, go to Window > Package Manager > + (in left top corner) > Add package from git URL > enter "com.unity.barracuda"
@@ -27,21 +28,19 @@ As a final step, drag-and-drop the Model Asset "pose_resnet_50_256x256.onnx" to 
 
 By default, the project is configured to track the joints of the upper body (joints 7 and 10-15), however all other joints can be configured in the Inspector by entering the following indices:
 
-0 - r ankle  
-1 - r knee   
-2 - r hip    
-3 - l hip    
-4 - l knee   
-5 - l ankle  
-6 - pelvis   
-7 - thorax   
-8 - upper neck 
-9 - head top 
-10 - r wrist
-11 - r elbow
-12 - r shoulder
-13- l shoulder 
-14 - l elbow 
-15 - l wrist      
-
-
+0 - r ankle     
+1 - r knee      
+2 - r hip       
+3 - l hip       
+4 - l knee      
+5 - l ankle     
+6 - pelvis      
+7 - thorax      
+8 - upper neck  
+9 - head top  
+10 - r wrist  
+11 - r elbow  
+12 - r shoulder  
+13- l shoulder   
+14 - l elbow   
+15 - l wrist  
