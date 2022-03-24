@@ -35,7 +35,7 @@ public class RGBHumanPoseDetector : MonoBehaviour
     PixelFormat m_pixelFormat;
     List<GameObject> sphere_list;
 
-    // training statistics for PoseNet
+    // training statistics for Pose-ResNet-50
     private float[] mean = { 0.485f, 0.456f, 0.406f };
     private float[] std = { 0.229f, 0.224f, 0.225f };
 
